@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { auth } from "../firebase";
 
 const Singup = () => {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("pbrmajhar@gmail.com");
 
   const loginHandle = async (e) => {
     e.preventDefault();

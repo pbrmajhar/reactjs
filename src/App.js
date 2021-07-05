@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Singup from "./pages/Singup";
 import Header from "./components/Header";
+import CompleteSignup from "./pages/CompleteSignup";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path="/login" exact component={Login} />
       <Route path="/singup" exact component={Singup} />
       <Route path="/dashboard" exact component={Dashboard} />
+      <Route path="/register/complete" exact component={CompleteSignup} />
     </BrowserRouter>
   );
 }
