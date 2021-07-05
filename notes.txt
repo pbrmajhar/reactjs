@@ -1,0 +1,14 @@
+To import firebase we need to go to firebase console and create the a file for firebase and also  
+have to install the firebase npm package. 
+npm i firebase
+and from firebase.js we need to export two things.
+
+export const auth = firebase.auth();
+export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+
+
+to use .env in react app the prefix of each key should "REACT_APP_"
+
+
+
+
