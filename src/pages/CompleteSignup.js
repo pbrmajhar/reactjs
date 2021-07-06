@@ -15,6 +15,9 @@ const CompleteSignup = ({ history }) => {
 
   const loginHandle = async (e) => {
     e.preventDefault();
+    if (!email || !password) {
+      return alert('email and password is required!');
+    }
     try {
       const result = await auth.signInWithEmailLink(
         email,
@@ -26,6 +29,7 @@ const CompleteSignup = ({ history }) => {
         let user = auth.currentUser;
         await user.updatePassword(password);
         const token = await user.getIdTokenResult();
+        history.push("/");
       }
     } catch (error) {
       console.log(error);

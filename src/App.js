@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { auth } from "./firebase";
 
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
@@ -9,6 +11,18 @@ import Header from "./components/Header";
 import CompleteSignup from "./pages/CompleteSignup";
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const unsubscribe = await auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const token = await user.getIdTokenResult();
+        dispatch({ type: "LOGIN_USER", payload: { token } });
+      }
+    });
+    
+    return () => unsubscribe();
+  }, []);
+
   return (
     <BrowserRouter>
       <Header />
