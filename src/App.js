@@ -3,12 +3,13 @@ import { BrowserRouter, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { auth } from "./firebase";
 
+import Header from "./components/Header";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Singup from "./pages/Singup";
-import Header from "./components/Header";
 import CompleteSignup from "./pages/CompleteSignup";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ function App() {
       <Route path="/singup" exact component={Singup} />
       <Route path="/dashboard" exact component={Dashboard} />
       <Route path="/register/complete" exact component={CompleteSignup} />
+      <Route path="/password/reset" exact component={ForgotPassword} />
     </BrowserRouter>
   );
 }

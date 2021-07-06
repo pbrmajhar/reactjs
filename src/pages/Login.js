@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { auth, googleAuthProvider } from "../firebase";
+import { Link } from "react-router-dom";
 
 const Login = ({ history }) => {
   const [email, setEmail] = useState("pbrmajhar@gmail.com");
@@ -75,6 +76,7 @@ const Login = ({ history }) => {
               >
                 Login with Google
               </button>
+              <Link to={'/password/reset'} style={{marginLeft: '10px'}}>Forgot password?</Link>
             </form>
           </div>
         </div>
