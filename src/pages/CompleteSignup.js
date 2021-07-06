@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { auth } from "../firebase";
 
 const CompleteSignup = ({ history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const isEmail = window.localStorage.getItem("registerEmail");
@@ -16,7 +18,7 @@ const CompleteSignup = ({ history }) => {
   const loginHandle = async (e) => {
     e.preventDefault();
     if (!email || !password) {
-      return alert('email and password is required!');
+      return alert("email and password is required!");
     }
     try {
       const result = await auth.signInWithEmailLink(
@@ -29,6 +31,13 @@ const CompleteSignup = ({ history }) => {
         let user = auth.currentUser;
         await user.updatePassword(password);
         const token = await user.getIdTokenResult();
+        dispatch({
+          type: "LOGIN_USER",
+          payload: {
+            email: result.user.email,
+            token: token.token,
+          },
+        });
         history.push("/");
       }
     } catch (error) {
