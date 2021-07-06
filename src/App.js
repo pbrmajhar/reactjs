@@ -13,13 +13,16 @@ import CompleteSignup from "./pages/CompleteSignup";
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
-    const unsubscribe = await auth.onAuthStateChanged(async (user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         const token = await user.getIdTokenResult();
-        dispatch({ type: "LOGIN_USER", payload: { token } });
+        dispatch({
+          type: "LOGIN_USER",
+          payload: { email: user.email, token: token.token },
+        });
       }
     });
-    
+
     return () => unsubscribe();
   }, []);
 

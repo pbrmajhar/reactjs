@@ -1,8 +1,18 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import './style.css'
+import { useDispatch } from "react-redux";
+import firebase from "firebase";
+import "./style.css";
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const logout = () => {
+    firebase.auth().signOut()
+    dispatch({
+      type: "LOGOUT",
+      payload: null,
+    });
+  };
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container">
@@ -41,6 +51,11 @@ const Header = () => {
               >
                 Singup
               </NavLink>
+            </li>
+            <li className="nav-item">
+              <button className="btn nav-link" onClick={logout}>
+                Logout
+              </button>
             </li>
           </ul>
         </div>
