@@ -1,8 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { auth } from "../firebase";
+import { useSelector } from "react-redux";
 
-const Singup = () => {
+const Singup = ({history}) => {
   const [email, setEmail] = useState("pbrmajhar@gmail.com");
+
+  const user = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (user && user.token) history.push("/");
+  }, [user]);
 
   const loginHandle = async (e) => {
     e.preventDefault();

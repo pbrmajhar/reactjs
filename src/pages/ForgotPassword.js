@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { auth } from "../firebase";
+import {useSelector} from 'react-redux'
 
-const ForgotPassword = () => {
+const ForgotPassword = ({history}) => {
   const [email, setEmail] = useState("");
+  const user = useSelector(state => state.user)
+
+  useEffect(() => {
+    if(user && user.token) history.push('/')
+  },[user])
 
   const submitHandle = async (e) => {
     e.preventDefault();
