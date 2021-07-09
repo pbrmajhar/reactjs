@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../firebase";
+import { login } from "../api/auth.api";
+
+
 
 const CompleteSignup = ({ history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,13 +35,21 @@ const CompleteSignup = ({ history }) => {
         let user = auth.currentUser;
         await user.updatePassword(password);
         const token = await user.getIdTokenResult();
-        dispatch({
-          type: "LOGIN_USER",
-          payload: {
-            email: result.user.email,
-            token: token.token,
-          },
-        });
+        login(token.token)
+        .then(async (res) => {
+          dispatch({
+            type: "LOGIN_USER",
+            payload: {
+              _id: res.data.user.user_id,
+              name: res.data.user.name,
+              picture: res.data.user.picture,
+              email: res.data.user.email,
+              role: res.data.user.role,
+              token: token.token,
+            },
+          });
+        })
+        .catch((err) => console.error(err));
         history.push("/");
       }
     } catch (error) {

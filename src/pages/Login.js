@@ -2,11 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { auth, googleAuthProvider } from "../firebase";
 import { Link } from "react-router-dom";
-import axios from "../api";
+import { login } from "../api/auth.api";
 
-const login = async (token) => {
-  return await axios.post("/api/singup", {}, { headers: { token } });
-};
 
 const Login = ({ history }) => {
   const [email, setEmail] = useState("pbrmajhar@gmail.com");
@@ -15,6 +12,7 @@ const Login = ({ history }) => {
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
+    console.log(process.env.REACT_APP_API)
     if (user && user.token) history.push("/");
   }, [user]);
 
@@ -25,17 +23,22 @@ const Login = ({ history }) => {
       const token = await user.getIdTokenResult();
 
       login(token.token)
-        .then((res) => console.log(res))
+        .then(async (res) => {
+          dispatch({
+            type: "LOGIN_USER",
+            payload: {
+              _id: res.data.user._id,
+              name: res.data.user.name,
+              picture: res.data.user.picture,
+              email: res.data.user.email,
+              role: res.data.user.role,
+              token: token.token,
+            },
+          });
+        })
         .catch((err) => console.error(err));
 
-      // dispatch({
-      //   type: "LOGIN_USER",
-      //   payload: {
-      //     email: user.email,
-      //     token: (await user.getIdTokenResult()).token,
-      //   },
-      // });
-      // history.push("/");
+      history.push("/");
     } catch (error) {
       console.log(error);
     }
@@ -45,18 +48,22 @@ const Login = ({ history }) => {
     auth
       .signInWithPopup(googleAuthProvider)
       .then(async (result) => {
-        const token = await result.user.getIdTokenResult()
+        const token = await result.user.getIdTokenResult();
         login(token.token)
-        .then((res) => console.log(res))
-        .catch((err) => console.error(err));
-
-        dispatch({
-          type: "LOGIN_USER",
-          payload: {
-            email: result.user.email,
-            token: await result.user.getIdTokenResult(),
-          },
-        });
+          .then((res) => {
+            dispatch({
+              type: "LOGIN_USER",
+              payload: {
+                _id: res.data._id,
+                name: res.data.name,
+                picture: res.data.picture,
+                email: user.data.email,
+                role: res.data.role,
+                token: token.token,
+              },
+            });
+          })
+          .catch((err) => console.error(err));
         history.push("/");
       })
       .catch((error) => {
