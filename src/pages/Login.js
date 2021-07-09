@@ -4,7 +4,6 @@ import { auth, googleAuthProvider } from "../firebase";
 import { Link } from "react-router-dom";
 import { login } from "../api/auth.api";
 
-
 const Login = ({ history }) => {
   const [email, setEmail] = useState("pbrmajhar@gmail.com");
   const [password, setPassword] = useState("adminadmin");
@@ -12,7 +11,7 @@ const Login = ({ history }) => {
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
-    console.log(process.env.REACT_APP_API)
+    console.log(process.env.REACT_APP_API);
     if (user && user.token) history.push("/");
   }, [user]);
 
@@ -21,17 +20,19 @@ const Login = ({ history }) => {
     try {
       const { user } = await auth.signInWithEmailAndPassword(email, password);
       const token = await user.getIdTokenResult();
-
+      console.log(token.token);
       login(token.token)
         .then(async (res) => {
+          console.log(res)
           dispatch({
             type: "LOGIN_USER",
             payload: {
-              _id: res.data.user._id,
-              name: res.data.user.name,
-              picture: res.data.user.picture,
-              email: res.data.user.email,
-              role: res.data.user.role,
+              _id: res.data._id,
+              name: res.data.name,
+              picture: res.data.picture,
+              email: res.data.email,
+              role: res.data.role,
+              note: "this is from login",
               token: token.token,
             },
           });
