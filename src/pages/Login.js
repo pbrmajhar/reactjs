@@ -15,15 +15,21 @@ const Login = ({ history }) => {
     if (user && user.token) history.push("/");
   }, [user]);
 
+  const roleBasedRedirect = (res) => {
+    if (res.data.role === "admin") {
+      history.push("admin/dashboard");
+    } else {
+      history.push("user/dashboard");
+    }
+  };
+
   const loginHandle = async (e) => {
     e.preventDefault();
     try {
       const { user } = await auth.signInWithEmailAndPassword(email, password);
       const token = await user.getIdTokenResult();
-      console.log(token.token);
       login(token.token)
         .then(async (res) => {
-          console.log(res)
           dispatch({
             type: "LOGIN_USER",
             payload: {
@@ -32,14 +38,12 @@ const Login = ({ history }) => {
               picture: res.data.picture,
               email: res.data.email,
               role: res.data.role,
-              note: "this is from login",
               token: token.token,
             },
           });
+          roleBasedRedirect(res);
         })
         .catch((err) => console.error(err));
-
-      history.push("/");
     } catch (error) {
       console.log(error);
     }
@@ -63,9 +67,9 @@ const Login = ({ history }) => {
                 token: token.token,
               },
             });
+            roleBasedRedirect(res)
           })
           .catch((err) => console.error(err));
-        history.push("/");
       })
       .catch((error) => {
         console.log(error);
