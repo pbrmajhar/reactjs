@@ -6,7 +6,8 @@ import { currentUser } from "./api/auth.api";
 
 import Header from "./components/Header";
 import Home from "./pages/Home";
-import Dashboard from "./pages/Dashboard";
+import UserDashboard from "./pages/user/Dashboard";
+import AdminDashboard from "./pages/admin/Dashboard";
 import Login from "./pages/Login";
 import Singup from "./pages/Singup";
 import CompleteSignup from "./pages/CompleteSignup";
@@ -27,7 +28,7 @@ function App() {
                 name: res.data.name,
                 picture: res.data.picture,
                 email: res.data.email,
-                note: 'this is from auto loagin',
+                note: "this is from auto loagin",
                 role: res.data.role,
                 token: token.token,
               },
@@ -46,7 +47,8 @@ function App() {
       <Route path="/" exact component={Home} />
       <Route path="/login" exact component={Login} />
       <Route path="/singup" exact component={Singup} />
-      <Route path="/dashboard" exact component={Dashboard} />
+      <Route path="/user/dashboard" exact component={UserDashboard} />
+      <Route path="/admin/dashboard" exact component={AdminDashboard} />
       <Route path="/register/complete" exact component={CompleteSignup} />
       <Route path="/password/reset" exact component={ForgotPassword} />
     </BrowserRouter>
