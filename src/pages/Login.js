@@ -11,15 +11,14 @@ const Login = ({ history }) => {
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
-    console.log(process.env.REACT_APP_API);
-    if (user && user.token) history.push("/");
+    if (user && user.token) roleBasedRedirect(user.role);
   }, [user]);
 
-  const roleBasedRedirect = (res) => {
-    if (res.data.role === "admin") {
-      history.push("admin/dashboard");
+  const roleBasedRedirect = (role) => {
+    if (role === "admin") {
+      history.push("/admin/dashboard");
     } else {
-      history.push("user/dashboard");
+      history.push("/user/dashboard");
     }
   };
 
@@ -41,7 +40,7 @@ const Login = ({ history }) => {
               token: token.token,
             },
           });
-          roleBasedRedirect(res);
+          roleBasedRedirect(res.data.role);
         })
         .catch((err) => console.error(err));
     } catch (error) {
@@ -62,12 +61,12 @@ const Login = ({ history }) => {
                 _id: res.data._id,
                 name: res.data.name,
                 picture: res.data.picture,
-                email: user.data.email,
+                email: res.data.email,
                 role: res.data.role,
                 token: token.token,
               },
             });
-            roleBasedRedirect(res)
+            roleBasedRedirect(res.data.role);
           })
           .catch((err) => console.error(err));
       })

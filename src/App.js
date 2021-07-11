@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { Switch, Route, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { auth } from "./firebase";
 import { currentUser } from "./api/auth.api";
+import UserRoute from "./routes/User.routes";
 
+// All components
 import Header from "./components/Header";
 import Home from "./pages/Home";
 import UserDashboard from "./pages/user/Dashboard";
@@ -12,8 +14,18 @@ import Login from "./pages/Login";
 import Singup from "./pages/Singup";
 import CompleteSignup from "./pages/CompleteSignup";
 import ForgotPassword from "./pages/ForgotPassword";
+import Password from "./pages/user/Password";
 
-function App() {
+const App = () => {
+  const history = useHistory()
+  const roleBasedRedirect = (res) => {
+    if (res.data.role === "admin") {
+      history.push("/admin/dashboard");
+    } else {
+      history.push("/user/dashboard");
+    }
+  };
+
   const dispatch = useDispatch();
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -26,13 +38,14 @@ function App() {
               payload: {
                 _id: res.data._id,
                 name: res.data.name,
+                note: "autoloading...",
                 picture: res.data.picture,
                 email: res.data.email,
-                note: "this is from auto loagin",
                 role: res.data.role,
                 token: token.token,
               },
             });
+            roleBasedRedirect(res);
           })
           .catch((err) => console.error(err));
       }
@@ -42,17 +55,20 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
+    <>
       <Header />
-      <Route path="/" exact component={Home} />
-      <Route path="/login" exact component={Login} />
-      <Route path="/singup" exact component={Singup} />
-      <Route path="/user/dashboard" exact component={UserDashboard} />
-      <Route path="/admin/dashboard" exact component={AdminDashboard} />
-      <Route path="/register/complete" exact component={CompleteSignup} />
-      <Route path="/password/reset" exact component={ForgotPassword} />
-    </BrowserRouter>
+      <Switch>
+        <Route path="/" exact component={Home} />
+        <Route path="/login" exact component={Login} />
+        <Route path="/singup" exact component={Singup} />
+        <UserRoute path="/user/dashboard" exact component={UserDashboard} />
+        <UserRoute path="/user/password" exact component={Password} />
+        <Route path="/admin/dashboard" exact component={AdminDashboard} />
+        <Route path="/register/complete" exact component={CompleteSignup} />
+        <Route path="/password/reset" exact component={ForgotPassword} />
+      </Switch>
+    </>
   );
-}
+};
 
 export default App;
