@@ -7,3 +7,7 @@ export const login = async (token) => {
 export const currentUser = async (token) => {
   return await axios.post("/api/currentuser", {}, { headers: { token } });
 };
+
+export const currentAdmin = async (token) => {
+  return await axios.post("/api/currentadmin", {}, { headers: { token } });
+};

@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { auth } from "./firebase";
 import { currentUser } from "./api/auth.api";
 import UserRoute from "./routes/User.routes";
+import AdminRoute from "./routes/Admin.routes";
 
 // All components
 import Header from "./components/Header";
@@ -63,7 +64,7 @@ const App = () => {
         <Route path="/singup" exact component={Singup} />
         <UserRoute path="/user/dashboard" exact component={UserDashboard} />
         <UserRoute path="/user/password" exact component={Password} />
-        <Route path="/admin/dashboard" exact component={AdminDashboard} />
+        <AdminRoute path="/admin/dashboard" exact component={AdminDashboard} />
         <Route path="/register/complete" exact component={CompleteSignup} />
         <Route path="/password/reset" exact component={ForgotPassword} />
       </Switch>

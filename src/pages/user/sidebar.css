@@ -1,0 +1,21 @@
+.sidebar {
+  position: fixed;
+  background-color: black;
+  width: 200px;
+  height: 90%;
+}
+.sidebar ul {
+  width: 100%;
+}
+.sidebar ul li a {
+  color: white;
+  transition: all 0.3s ease-in-out;
+}
+.sidebar ul li a.active {
+  background-color: blue;
+  border-radius: 0;
+}
+.sidebar ul li a:hover {
+  background-color: blue;
+  color: white;
+}
