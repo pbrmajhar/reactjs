@@ -8,7 +8,7 @@ const ForgotPassword = ({history}) => {
 
   useEffect(() => {
     if(user && user.token) history.push('/')
-  },[user])
+  },[user, history])
 
   const submitHandle = async (e) => {
     e.preventDefault();

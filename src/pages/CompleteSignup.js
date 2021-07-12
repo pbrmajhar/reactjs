@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { auth } from "../firebase";
 import { login } from "../api/auth.api";
 
@@ -8,7 +8,6 @@ import { login } from "../api/auth.api";
 const CompleteSignup = ({ history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {

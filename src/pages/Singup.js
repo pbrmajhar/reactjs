@@ -9,7 +9,7 @@ const Singup = ({history}) => {
 
   useEffect(() => {
     if (user && user.token) history.push("/");
-  }, [user]);
+  }, [user, history]);
 
   const loginHandle = async (e) => {
     e.preventDefault();
