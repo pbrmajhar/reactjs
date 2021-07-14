@@ -16,6 +16,7 @@ import Singup from "./pages/Singup";
 import CompleteSignup from "./pages/CompleteSignup";
 import ForgotPassword from "./pages/ForgotPassword";
 import Password from "./pages/user/Password";
+import Category from "./pages/admin/Category";
 
 const App = () => {
   const history = useHistory()
@@ -65,6 +66,7 @@ const App = () => {
         <UserRoute path="/user/dashboard" exact component={UserDashboard} />
         <UserRoute path="/user/password" exact component={Password} />
         <AdminRoute path="/admin/dashboard" exact component={AdminDashboard} />
+        <AdminRoute path="/admin/category" exact component={Category} />
         <Route path="/register/complete" exact component={CompleteSignup} />
         <Route path="/password/reset" exact component={ForgotPassword} />
       </Switch>

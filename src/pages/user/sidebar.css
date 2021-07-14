@@ -1,21 +1,25 @@
 .sidebar {
   position: fixed;
-  background-color: black;
   width: 200px;
+  background-color: transparent;
   height: 90%;
 }
 .sidebar ul {
   width: 100%;
 }
 .sidebar ul li a {
+  background-color: #9c88ff;
+  margin-bottom: 5px;
   color: white;
   transition: all 0.3s ease-in-out;
+  border-radius: 5px;
 }
 .sidebar ul li a.active {
-  background-color: blue;
-  border-radius: 0;
+  background-color: #40739e;
+  border-radius: 5;
 }
 .sidebar ul li a:hover {
-  background-color: blue;
+  background-color:#40739e;
   color: white;
+  border-radius: 5;
 }

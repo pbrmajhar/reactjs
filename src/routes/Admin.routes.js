@@ -11,17 +11,15 @@ const AdminRoute = ({ children, ...rest }) => {
     if (user && user.token) {
       currentAdmin(user.token)
         .then((res) => {
-          console.log("CURRENT ADMIN RES", res.data.role);
           setOk(true);
         })
         .catch((err) => {
-          console.log("ADMIN ROUTE ERR", err);
           setOk(false);
         });
     }
   }, [user]);
 
-  return ok ? <Route {...rest} /> : 'Loading..';
+  return ok ? <Route {...rest} /> : "Loading..";
 };
 
 export default AdminRoute;
