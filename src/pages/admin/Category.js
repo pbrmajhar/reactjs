@@ -5,12 +5,16 @@ import { useSelector } from "react-redux";
 import {
   create,
   getCategories,
+  updateCategory,
   deleteCategories,
 } from "../../api/category.api";
+import CategoryForm from "../../components/forms/Category.form";
 
 const Category = () => {
   const user = useSelector((state) => state.user);
   const [name, setName] = useState("");
+  const [slug, setSlug] = useState("");
+  const [id, setId] = useState("");
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -24,9 +28,23 @@ const Category = () => {
 
   const saveCategory = async (e) => {
     e.preventDefault();
-    const result = await create(name, user.token);
-    setName("");
-    loadCats();
+    if (!id) {
+      await create(name, user.token);
+      setName("");
+      loadCats();
+    } else {
+      await updateCategory(name, slug, user.token);
+      setId("");
+      setName("");
+      setSlug("");
+      loadCats();
+    }
+  };
+
+  const updateCat = async (_id, name, slug) => {
+    setId(_id);
+    setName(name);
+    setSlug(slug);
   };
 
   const deleteCat = async (slug) => {
@@ -41,26 +59,12 @@ const Category = () => {
           <Sidebar />
         </div>
         <div className="col">
-          <form onSubmit={saveCategory}>
-            <div className="col-12">
-              <label className="form-label">Name</label>
-              <input
-                type="text"
-                className="form-control"
-                value={name}
-                onChange={(e) => {
-                  setName(e.target.value);
-                }}
-              />
-            </div>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              style={{ marginTop: "10px" }}
-            >
-              Save
-            </button>
-          </form>
+          <CategoryForm
+            id={id}
+            name={name}
+            saveCategory={saveCategory}
+            setName={setName}
+          />
         </div>
 
         <div className="col">
@@ -80,6 +84,22 @@ const Category = () => {
                   onClick={() => deleteCat(cat.slug)}
                 >
                   <i className="fas fa-trash-alt"></i>
+                </button>
+                <button
+                  className=""
+                  style={{
+                    border: 0,
+                    float: "right",
+                    padding: "0px",
+                    backgroundColor: "transparent",
+                    color: "red",
+                    marginRight: "10px",
+                  }}
+                  onClick={() => {
+                    updateCat(cat._id, cat.name, cat.slug);
+                  }}
+                >
+                  <i className="fas fa-pencil-alt"></i>
                 </button>
               </li>
             ))}

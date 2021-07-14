@@ -14,7 +14,7 @@ export const getCategory = async (slug) => {
 
 export const updateCategory = async (name, slug, token) => {
   return await axios.patch(
-    `/api/category/${slug}`,
+    `/api/cat/category/${slug}`,
     { name },
     { headers: { token } }
   );
