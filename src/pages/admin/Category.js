@@ -15,6 +15,7 @@ const Category = () => {
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
   const [id, setId] = useState("");
+  const [keyword, setKeyword] = useState("");
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -52,6 +53,10 @@ const Category = () => {
     loadCats();
   };
 
+  const searched = (keyword) => (c) => (
+     c.name.toLowerCase().includes(keyword)
+  );
+
   return (
     <div className="container" style={{ marginTop: "10px" }}>
       <div className="row">
@@ -68,8 +73,20 @@ const Category = () => {
         </div>
 
         <div className="col">
+          <div className="col-12">
+            <label className="form-label">Search</label>
+            <input
+              type="text"
+              className="form-control"
+              style={{ marginBottom: "10px" }}
+              value={keyword}
+              onChange={(e) => {
+                setKeyword(e.target.value.toLowerCase());
+              }}
+            />
+          </div>
           <ul className="list-group">
-            {categories.map((cat) => (
+            {categories.filter(searched(keyword)).map((cat) => (
               <li className="list-group-item" key={cat._id}>
                 {cat.name}
                 <button
