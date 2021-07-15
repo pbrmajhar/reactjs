@@ -6,6 +6,7 @@ import { getCategories } from "../../api/category.api";
 import {
   create,
   getSubCategories,
+  updateSubCat,
   deleteSubcat,
 } from "../../api/subcategory.api";
 import SubcategoryForm from "../../components/forms/Subcategory.form";
@@ -13,7 +14,8 @@ import SubcategoryForm from "../../components/forms/Subcategory.form";
 const SubCategory = () => {
   const [id, setId] = useState("");
   const [name, setName] = useState("");
-  const [category, setCategory] = useState("");
+  const [slug, setSlug] = useState("");
+  const [parCategory, setParCategory] = useState("");
   const [categories, setCategories] = useState([]);
   const [keyword, setKeyword] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
@@ -32,19 +34,30 @@ const SubCategory = () => {
   const loadSubCats = async () => {
     const result = await getSubCategories();
     setSubCategories(result.data);
+    //console.log(result)
   };
 
   const saveCategory = async (e) => {
     e.preventDefault();
     if (!id) {
-      if (category) {
-        await create(name, category, user.token);
-        setName('')
+      if (parCategory) {
+        await create(name, parCategory, user.token);
+        setName("");
         loadSubCats();
       } else {
         alert("please select a category!");
       }
+    } else {
+      const result = await updateSubCat(slug, name, parCategory, user.token);
+      loadSubCats();
     }
+  };
+
+  const updateCat = (id, name, slug, parent) => {
+    setId(id);
+    setName(name);
+    setSlug(slug);
+    setParCategory(parent);
   };
 
   const deleteSub = async (slug) => {
@@ -64,8 +77,9 @@ const SubCategory = () => {
           <SubcategoryForm
             id={id}
             categories={categories}
-            setCategory={setCategory}
             name={name}
+            parCategory={parCategory}
+            setParCategory={setParCategory}
             saveCategory={saveCategory}
             setName={setName}
           />
@@ -111,9 +125,9 @@ const SubCategory = () => {
                     color: "red",
                     marginRight: "10px",
                   }}
-                  // onClick={() => {
-                  //   updateCat(cat._id, cat.name, cat.slug);
-                  // }}
+                  onClick={() => {
+                    updateCat(cat._id, cat.name, cat.slug, cat.parent);
+                  }}
                 >
                   <i className="fas fa-pencil-alt"></i>
                 </button>

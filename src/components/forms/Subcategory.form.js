@@ -3,8 +3,9 @@ import React from "react";
 const SubcategoryForm = ({
   id,
   categories,
-  setCategory,
   name,
+  parCategory,
+  setParCategory,
   saveCategory,
   setName,
 }) => {
@@ -14,10 +15,14 @@ const SubcategoryForm = ({
         <label className="form-label">Select category</label>
         <select
           className="form-select"
-          onChange={(c) => setCategory(c.target.value)}
+          onChange={(c) => setParCategory(c.target.value)}
         >
           {categories.map((cat) => (
-            <option key={cat._id} value={cat._id}>
+            <option
+              key={cat._id}
+              value={cat._id}
+              selected={cat._id === parCategory}
+            >
               {cat.name}
             </option>
           ))}
