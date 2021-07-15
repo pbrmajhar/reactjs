@@ -12,6 +12,11 @@ const Sidebar = () => {
           </NavLink>
         </li>
         <li className="nav-item">
+          <NavLink className="nav-link" exact activeClassName="active" to="/admin/sub/category">
+           Sub Categoty
+          </NavLink>
+        </li>
+        <li className="nav-item">
           <NavLink className="nav-link" exact activeClassName="active" to="/user/password">
             Password
           </NavLink>
