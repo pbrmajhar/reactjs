@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { createProduct } from "../../../api/product.api";
-import { getCategories } from "../../../api/category.api";
+import { getCategories, getSubCats } from "../../../api/category.api";
 import Sidebar from "../Sidebar";
 
 // import slugify from "slugify";
@@ -22,6 +22,7 @@ const initialState = {
 const Product = () => {
   const [values, setValues] = useState(initialState);
   const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -36,10 +37,16 @@ const Product = () => {
     e.preventDefault();
     try {
       const result = await createProduct(values, user.token);
+      window.alert(`${result.data.title} is created`);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const fetchSubCats = async (id) => {
+    const response = await getSubCats(id)
+    setSubCategories(response.data)
+  }
   return (
     <div className="container" style={{ marginBottom: "100px" }}>
       <div className="row">
@@ -86,9 +93,10 @@ const Product = () => {
               <label className="form-label">Category</label>
               <select
                 className="form-select"
-                onChange={(e) =>
-                  setValues({ ...values, category: e.target.value })
-                }
+                onChange={(e) => {
+                  setValues({ ...values, category: e.target.value });
+                  fetchSubCats(e.target.value);
+                }}
               >
                 <option selected>Select Category</option>
                 {categories.map((cat) => (
@@ -107,7 +115,7 @@ const Product = () => {
                 }
               >
                 <option selected>Select Sub Category</option>
-                {categories.map((cat) => (
+                {subCategories.map((cat) => (
                   <option key={cat._id} value={cat._id}>
                     {cat.name}
                   </option>

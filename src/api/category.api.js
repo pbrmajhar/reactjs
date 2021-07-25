@@ -25,3 +25,8 @@ export const deleteCategories = async (slug, token) => {
     headers: { token },
   });
 };
+
+
+export const getSubCats = async (_id) => {
+  return await axios.get(`/api/cat/subcategory/${_id}`)
+}
