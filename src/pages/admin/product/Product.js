@@ -28,11 +28,13 @@ const Product = () => {
   useEffect(() => {
     loadCats();
   }, []);
+  console.log(values.sub_category);
 
   const loadCats = async () => {
     const result = await getCategories();
     setCategories(result.data);
   };
+  
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -45,7 +47,9 @@ const Product = () => {
 
   const fetchSubCats = async (id) => {
     const response = await getSubCats(id);
+    setValues({...values, sub_category: []})
     setSubCategories(response.data);
+
   };
   return (
     <div className="container" style={{ marginBottom: "100px" }}>
@@ -55,7 +59,7 @@ const Product = () => {
         </div>
         <div className="col" style={{ marginBottom: "10px" }}>
           <h4>Create Product</h4>
-          {JSON.stringify(values.sub_category)}
+          {JSON.stringify(values)}
           <form onSubmit={submitHandler}>
             <div className="col-md-6">
               <label className="form-label">Title</label>
@@ -111,13 +115,17 @@ const Product = () => {
               <select
                 className="form-select"
                 multiple
-                onChange={(e) =>
-                  setValues({ ...values, sub_category: e.target.value })
-                }
+                onChange={(e) => {
+                  setValues({ ...values, sub_category: [e.target.value] });
+                }}
               >
                 <option selected>Select Sub Category</option>
-                {subCategories.map((cat) => (
-                  <option key={cat._id} value={cat._id}>
+                {subCategories.map((cat, index) => (
+                  <option
+                    key={cat._id}
+                    value={cat._id}
+                    selected={index === values.sub_category}
+                  >
                     {cat.name}
                   </option>
                 ))}
