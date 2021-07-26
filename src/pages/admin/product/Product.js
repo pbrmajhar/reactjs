@@ -44,9 +44,9 @@ const Product = () => {
   };
 
   const fetchSubCats = async (id) => {
-    const response = await getSubCats(id)
-    setSubCategories(response.data)
-  }
+    const response = await getSubCats(id);
+    setSubCategories(response.data);
+  };
   return (
     <div className="container" style={{ marginBottom: "100px" }}>
       <div className="row">
@@ -55,7 +55,7 @@ const Product = () => {
         </div>
         <div className="col" style={{ marginBottom: "10px" }}>
           <h4>Create Product</h4>
-          {/* {JSON.stringify(values)} */}
+          {JSON.stringify(values.sub_category)}
           <form onSubmit={submitHandler}>
             <div className="col-md-6">
               <label className="form-label">Title</label>
@@ -110,6 +110,7 @@ const Product = () => {
               <label className="form-label">Sub Category</label>
               <select
                 className="form-select"
+                multiple
                 onChange={(e) =>
                   setValues({ ...values, sub_category: e.target.value })
                 }
