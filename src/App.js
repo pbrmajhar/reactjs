@@ -19,9 +19,10 @@ import Password from "./pages/user/Password";
 import Category from "./pages/admin/Category";
 import SubCategory from "./pages/admin/SubCategory";
 import Product from "./pages/admin/product/Product";
+import Fileupload from "./pages/admin/product/Fileupload";
 
 const App = () => {
-  const history = useHistory()
+  const history = useHistory();
   const roleBasedRedirect = (res) => {
     if (res.data.role === "admin") {
       history.push("/admin/dashboard");
@@ -65,6 +66,7 @@ const App = () => {
         <Route path="/" exact component={Home} />
         <Route path="/login" exact component={Login} />
         <Route path="/singup" exact component={Singup} />
+        <Route path="/fileupload" exact component={Fileupload} />
         <UserRoute path="/user/dashboard" exact component={UserDashboard} />
         <UserRoute path="/user/password" exact component={Password} />
         <AdminRoute path="/admin/dashboard" exact component={AdminDashboard} />

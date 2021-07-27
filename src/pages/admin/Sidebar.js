@@ -36,6 +36,16 @@ const Sidebar = () => {
             Add Product
           </NavLink>
         </li>
+        <li className="nav-item">
+          <NavLink
+            className="nav-link"
+            exact
+            activeClassName="active"
+            to="/fileupload"
+          >
+            Add Library
+          </NavLink>
+        </li>
       </ul>
     </div>
   );
