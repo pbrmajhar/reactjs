@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../../../api/api";
 import Resizer from "react-image-file-resizer";
 import Sidebar from "../Sidebar";
 
@@ -17,8 +17,8 @@ const Fileupload = () => {
           "JPEG",
           100,
           0,
-          (uri) => {
-            console.log(uri)
+          (data) => {
+            axios.post('api/upload', {data})
           },
           "base64"
         );
