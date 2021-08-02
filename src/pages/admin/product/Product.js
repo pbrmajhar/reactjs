@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { createProduct } from "../../../api/product.api";
 import { getCategories, getSubCats } from "../../../api/category.api";
 import Sidebar from "../Sidebar";
+import axios from "../../../api/api";
 
 // import slugify from "slugify";
 const initialState = {
@@ -23,23 +24,27 @@ const Product = () => {
   const [values, setValues] = useState(initialState);
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
-  const user = useSelector((state) => state.user);
+  const { token } = useSelector((state) => state.user);
 
   useEffect(() => {
     loadCats();
   }, []);
-  console.log(values.sub_category);
+
 
   const loadCats = async () => {
     const result = await getCategories();
     setCategories(result.data);
   };
-  
+
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const result = await createProduct(values, user.token);
-      window.alert(`${result.data.title} is created`);
+      const formData = new FormData()
+      formData.append('title', values.title)
+      formData.append('file', values.images)
+      const result = await createProduct(formData, token);
+      //const result = await axios.post('api/upload',formData);
+      //window.alert(`${result.data.title} is created`);
     } catch (error) {
       console.log(error);
     }
@@ -47,9 +52,8 @@ const Product = () => {
 
   const fetchSubCats = async (id) => {
     const response = await getSubCats(id);
-    setValues({...values, sub_category: []})
     setSubCategories(response.data);
-
+    setValues({ ...values, category: id, sub_category: [] });
   };
   return (
     <div className="container" style={{ marginBottom: "100px" }}>
@@ -61,6 +65,16 @@ const Product = () => {
           <h4>Create Product</h4>
           {JSON.stringify(values)}
           <form onSubmit={submitHandler}>
+            <div className="col-md-6">
+              <label className="form-label">Image</label>
+              <input
+                type="file"
+                className="form-control"
+                onChange={(e) =>
+                  setValues({ ...values, images: e.target.files[0] })
+                }
+              />
+            </div>
             <div className="col-md-6">
               <label className="form-label">Title</label>
               <input
@@ -98,7 +112,6 @@ const Product = () => {
               <select
                 className="form-select"
                 onChange={(e) => {
-                  setValues({ ...values, category: e.target.value });
                   fetchSubCats(e.target.value);
                 }}
               >
