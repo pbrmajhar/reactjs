@@ -19,6 +19,10 @@ import Password from "./pages/user/Password";
 import Category from "./pages/admin/Category";
 import SubCategory from "./pages/admin/SubCategory";
 import Product from "./pages/admin/product/Product";
+import AllProducts from "./pages/admin/product/AllProducts";
+import UpdateProduct from "./pages/admin/product/UpdateProduct";
+import Single from "./pages/Single";
+import Search from "./pages/Search";
 
 const App = () => {
   const history = useHistory();
@@ -65,14 +69,22 @@ const App = () => {
         <Route path="/" exact component={Home} />
         <Route path="/login" exact component={Login} />
         <Route path="/singup" exact component={Singup} />
+        <Route path="/register/complete" exact component={CompleteSignup} />
+        <Route path="/password/reset" exact component={ForgotPassword} />
         <UserRoute path="/user/dashboard" exact component={UserDashboard} />
         <UserRoute path="/user/password" exact component={Password} />
         <AdminRoute path="/admin/dashboard" exact component={AdminDashboard} />
         <AdminRoute path="/admin/category" exact component={Category} />
         <AdminRoute path="/admin/sub/category" exact component={SubCategory} />
         <AdminRoute path="/admin/product" exact component={Product} />
-        <Route path="/register/complete" exact component={CompleteSignup} />
-        <Route path="/password/reset" exact component={ForgotPassword} />
+        <AdminRoute path="/admin/allproduct" exact component={AllProducts} />
+        <AdminRoute
+          path="/admin/product/update/:slug"
+          exact
+          component={UpdateProduct}
+        />
+        <Route path="/product/:slug" exact component={Single} />
+        <Route path="/result" exact component={Search} />
       </Switch>
     </>
   );

@@ -1,9 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import firebase from "firebase";
 import { useHistory } from "react-router-dom";
 import "./style.css";
+import Search from "./forms/Search";
+
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -49,9 +51,9 @@ const Header = () => {
               </>
             )}
           </ul>
-
+          <Search />
           <ul
-            className="navbar-nav ml-auto mb-2 mb-lg-0"
+            className="navbar-nav ml-auto mb-4 mb-lg-0"
             style={{ float: "right" }}
           >
             {!user && (
