@@ -3,22 +3,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { auth, googleAuthProvider } from "../firebase";
 import { Link } from "react-router-dom";
 import { login } from "../api/auth.api";
+import { loginReducer } from "../store/reducers/user";
 
 const Login = ({ history }) => {
   const [email, setEmail] = useState("pbrmajhar@gmail.com");
   const [password, setPassword] = useState("adminadmin");
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user.value);
 
   useEffect(() => {
     if (user && user.token) roleBasedRedirect(user.role);
   }, [user]);
 
   const roleBasedRedirect = (role) => {
-    if (role === "admin") {
-      history.push("/admin/dashboard");
+    const indendet = history.location.state;
+    if (indendet) {
+      history.push(indendet.from);
     } else {
-      history.push("/user/dashboard");
+      if (role === "admin") {
+        history.push("/admin/dashboard");
+      } else {
+        history.push("/user/dashboard");
+      }
     }
   };
 
@@ -29,17 +35,15 @@ const Login = ({ history }) => {
       const token = await user.getIdTokenResult();
       login(token.token)
         .then(async (res) => {
-          dispatch({
-            type: "LOGIN_USER",
-            payload: {
+          dispatch(
+            loginReducer({
               _id: res.data._id,
               name: res.data.name,
-              picture: res.data.picture,
               email: res.data.email,
               role: res.data.role,
               token: token.token,
-            },
-          });
+            })
+          );
           roleBasedRedirect(res.data.role);
         })
         .catch((err) => console.error(err));

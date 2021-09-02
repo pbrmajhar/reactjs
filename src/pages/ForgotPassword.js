@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux'
 
 const ForgotPassword = ({history}) => {
   const [email, setEmail] = useState("");
-  const user = useSelector(state => state.user)
+  const user = useSelector((state) => state.user.value);
 
   useEffect(() => {
     if(user && user.token) history.push('/')

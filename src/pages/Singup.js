@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 const Singup = ({history}) => {
   const [email, setEmail] = useState("pbrmajhar@gmail.com");
 
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user.value);
 
   useEffect(() => {
     if (user && user.token) history.push("/");

@@ -23,6 +23,9 @@ import AllProducts from "./pages/admin/product/AllProducts";
 import UpdateProduct from "./pages/admin/product/UpdateProduct";
 import Single from "./pages/Single";
 import Search from "./pages/Search";
+import Cart from "./pages/Cart";
+import { loginReducer } from "./store/reducers/user";
+import Checkout from "./pages/Checkout";
 
 const App = () => {
   const history = useHistory();
@@ -41,19 +44,16 @@ const App = () => {
         const token = await user.getIdTokenResult();
         currentUser(token.token)
           .then(async (res) => {
-            dispatch({
-              type: "LOGIN_USER",
-              payload: {
+            dispatch(
+              loginReducer({
                 _id: res.data._id,
                 name: res.data.name,
-                note: "autoloading...",
-                picture: res.data.picture,
                 email: res.data.email,
                 role: res.data.role,
                 token: token.token,
-              },
-            });
-            roleBasedRedirect(res);
+              })
+            );
+           // roleBasedRedirect(res);
           })
           .catch((err) => console.error(err));
       }
@@ -85,6 +85,8 @@ const App = () => {
         />
         <Route path="/product/:slug" exact component={Single} />
         <Route path="/result" exact component={Search} />
+        <Route path="/cart" exact component={Cart} />
+        <Route path="/checkout" exact component={Checkout} />
       </Switch>
     </>
   );

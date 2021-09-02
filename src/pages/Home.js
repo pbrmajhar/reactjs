@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { getProductsOnclient } from "../api/product.api";
 import Pagination from "../components/Pagination";
+import _ from "lodash";
 import "./Home.style.css";
+import { addToCart, calculateTotal } from "../store/reducers/cartReducer";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [perPage, setPerPage] = useState(4);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState([]);
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     loadProduct();
@@ -21,6 +26,20 @@ const Home = () => {
       .fill(null)
       .map((v, i) => i);
     setTotalPages(pages);
+  };
+
+  const cartHandler = (product) => {
+    let cart = [];
+    
+    dispatch(calculateTotal(parseInt(product.price)))
+    if (localStorage.getItem("cart")) {
+      cart = JSON.parse(localStorage.getItem("cart"));
+    }
+    cart.push({ ...product, count: 1 });
+    // console.log(store.map((item) => item._id));
+    let unique = _.uniqWith(cart, _.isEqual);
+    localStorage.setItem("cart", JSON.stringify(unique));
+    dispatch(addToCart(unique))
   };
 
   return (
@@ -45,8 +64,9 @@ const Home = () => {
                     <button
                       className="btn btn-primary"
                       style={{ marginRight: "5px" }}
+                      onClick={() => cartHandler(product)}
                     >
-                      Buy now
+                      Add to cart
                     </button>
                     <Link
                       to={`/product/${product.slug}`}

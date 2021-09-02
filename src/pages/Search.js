@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { getProductsOnclient } from "../api/product.api";
+import { getProductsOnclient, productSearch } from "../api/product.api";
 import Pagination from "../components/Pagination";
 
 const Search = () => {
   const [products, setProducts] = useState([]);
-  const [perPage, setPerPage] = useState(2);
+  const [perPage, setPerPage] = useState(4);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState([]);
 
-  const { text } = useSelector((state) => state.query);
+  const text = useSelector((state) => state.search.value);
 
   useEffect(() => {
     loadProduct();
-  }, [currentPage]);
+  }, []);
+
+  useEffect(() => {
+    searchHandler(text);
+  }, [text]);
 
   const loadProduct = async () => {
     const response = await getProductsOnclient(perPage, currentPage);
@@ -25,7 +29,10 @@ const Search = () => {
     setTotalPages(pages);
   };
 
-  const searchHandler = async () => {};
+  const searchHandler = async (text) => {
+    const response = await productSearch(text);
+    setProducts(response.data);
+  };
 
   return (
     <div className="container">
@@ -63,11 +70,13 @@ const Search = () => {
               </div>
             </div>
           ))}
-          <Pagination
-            totalPages={totalPages}
-            setCurrentPage={setCurrentPage}
-            currentPage={currentPage}
-          />
+          {products.length >= 1 && (
+            <Pagination
+              totalPages={totalPages}
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+            />
+          )}
         </div>
       </div>
     </div>

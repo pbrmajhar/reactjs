@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { productSearch } from "../../api/product.api";
+import {search} from "../../store/reducers/search";
 
 const Search = () => {
   const [key, setKey] = useState("");
@@ -9,20 +10,20 @@ const Search = () => {
   let dispatch = useDispatch();
   let history = useHistory();
 
-  const { text } = useSelector((state) => state.query);
-  console.log("from redux---->", text);
+  const text = useSelector((state) => state.search.value);
 
   const searchHandler = async (e) => {
     e.preventDefault();
     const response = await productSearch(text);
-    history.push(`/result?search_query=${text}`);
+    history.push(`/result`);
     console.log(response);
   };
   const chnagesHandler = (e) => {
-    dispatch({
-      type: "SEARCH",
-      payload: { text: e.target.value },
-    });
+    dispatch(
+      search({
+        text: e.target.value.toString()
+      })
+    );
   };
 
   return (

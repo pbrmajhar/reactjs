@@ -7,13 +7,14 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { rootReducer } from "./store";
+import { store } from "./store";
 
-const store = createStore(rootReducer, composeWithDevTools());
+//const store = createStore(rootReducer, composeWithDevTools());
 
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-    <App />
+      <App />
     </BrowserRouter>
   </Provider>,
   document.getElementById("root")

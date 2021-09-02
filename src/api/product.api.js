@@ -18,8 +18,8 @@ export const getProduct = async (slug) => {
   return axios.get(`/api/product/${slug}`);
 };
 
-export const productSearch = async (key) => {
-  return axios.post(`/api/product/search`, { search: key });
+export const productSearch = async (key, price) => {
+  return axios.post(`/api/product/search`, { search: key, price });
 };
 
 export const deleteProduct = async (id, token) => {
