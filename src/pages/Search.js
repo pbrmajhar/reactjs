@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { getProductsOnclient } from "../api/product.api";
+import { useSelector } from "react-redux";
+import { getProductsOnclient, productSearch } from "../api/product.api";
 import Pagination from "../components/Pagination";
-import _ from "lodash";
-import "./Home.style.css";
-import { addToCart, calculateTotal } from "../store/reducers/cartReducer";
 
-const Home = () => {
+const Search = () => {
   const [products, setProducts] = useState([]);
   const [perPage, setPerPage] = useState(4);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState([]);
 
-  const dispatch = useDispatch()
+  const text = useSelector((state) => state.search.value);
 
   useEffect(() => {
     loadProduct();
-  }, [currentPage]);
+  }, []);
+
+  useEffect(() => {
+    searchHandler(text);
+  }, [text]);
 
   const loadProduct = async () => {
     const response = await getProductsOnclient(perPage, currentPage);
@@ -28,18 +29,9 @@ const Home = () => {
     setTotalPages(pages);
   };
 
-  const cartHandler = (product) => {
-    let cart = [];
-    
-    dispatch(calculateTotal(parseInt(product.price)))
-    if (localStorage.getItem("cart")) {
-      cart = JSON.parse(localStorage.getItem("cart"));
-    }
-    cart.push({ ...product, count: 1 });
-    // console.log(store.map((item) => item._id));
-    let unique = _.uniqWith(cart, _.isEqual);
-    localStorage.setItem("cart", JSON.stringify(unique));
-    dispatch(addToCart(unique))
+  const searchHandler = async (text) => {
+    const response = await productSearch(text);
+    setProducts(response.data);
   };
 
   return (
@@ -64,9 +56,8 @@ const Home = () => {
                     <button
                       className="btn btn-primary"
                       style={{ marginRight: "5px" }}
-                      onClick={() => cartHandler(product)}
                     >
-                      Add to cart
+                      Buy now
                     </button>
                     <Link
                       to={`/product/${product.slug}`}
@@ -79,15 +70,17 @@ const Home = () => {
               </div>
             </div>
           ))}
-          <Pagination
-            totalPages={totalPages}
-            setCurrentPage={setCurrentPage}
-            currentPage={currentPage}
-          />
+          {products.length >= 1 && (
+            <Pagination
+              totalPages={totalPages}
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+            />
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-export default Home;
+export default Search;

@@ -3,7 +3,7 @@ import { Route, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const UserRoute = ({ children, ...rest }) => {
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user.value);
   return user && user.token ? (
     <Route {...rest} render={() => children} />
   ) : (

@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { createProduct, getProducts } from "../../../api/product.api";
+import { getProduct } from "../../../api/product.api";
 import { getCategories, getSubCats } from "../../../api/category.api";
 import Sidebar from "../Sidebar";
-import axios from "../../../api/api";
 
-// import slugify from "slugify";
 const initialState = {
   title: "",
   description: "",
@@ -20,48 +18,39 @@ const initialState = {
   size: "",
 };
 
-const Product = () => {
+const UpdateProduct = ({ match }) => {
   const [values, setValues] = useState(initialState);
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const { token } = useSelector((state) => state.user);
+  const { slug } = match.params;
 
   useEffect(() => {
-    loadCats();
+    loadProduct();
+    loadCategory();
   }, []);
 
-  const loadCats = async () => {
-    const result = await getCategories();
-    setCategories(result.data);
+  useEffect(() => {
+    fetchSubCats(values.category._id);
+  }, [categories]);
+
+  const loadProduct = async () => {
+    const result = await getProduct(slug);
+    setValues({ ...values, ...result.data });
   };
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    try {
-      const formData = new FormData();
-      formData.append("file", values.images);
-      formData.append("title", values.title);
-      formData.append("description", values.description);
-      formData.append("price", values.price);
-      formData.append("category", values.category);
-      formData.append("sub_category", values.sub_category);
-      formData.append("quantity", values.quantity);
-      formData.append("shipping", values.shipping);
-      formData.append("colors", values.colors);
-      formData.append("brands", values.brands);
-      formData.append("size", values.size);
-      const result = await createProduct(formData, token);
-      console.log(result);
-    } catch (error) {
-      console.log(error);
-    }
+  const loadCategory = async () => {
+    const response = await getCategories();
+    setCategories(response.data);
   };
 
   const fetchSubCats = async (id) => {
     const response = await getSubCats(id);
     setSubCategories(response.data);
-    setValues({ ...values, category: id, sub_category: [] });
   };
+
+  const submitHandler = () => {};
+console.log(values.sub_category)
   return (
     <div className="container" style={{ marginBottom: "100px" }}>
       <div className="row">
@@ -69,7 +58,7 @@ const Product = () => {
           <Sidebar />
         </div>
         <div className="col" style={{ marginBottom: "10px" }}>
-          <h4>Create Product</h4>
+          <h4>All Products</h4>
           <form onSubmit={submitHandler}>
             <div className="col-md-6">
               <label className="form-label">Image</label>
@@ -122,14 +111,20 @@ const Product = () => {
                 }}
               >
                 <option selected>Select Category</option>
+                {values.category.name}
                 {categories.map((cat) => (
-                  <option key={cat._id} value={cat._id}>
+                  <option
+                    key={cat._id}
+                    value={cat._id}
+                    selected={cat._id === values.category._id}
+                  >
                     {cat.name}
                   </option>
                 ))}
               </select>
             </div>
             <div className="col-md-6">
+              {JSON.stringify(values.sub_category._id)}
               <label className="form-label">Sub Category</label>
               <select
                 className="form-select"
@@ -143,7 +138,7 @@ const Product = () => {
                   <option
                     key={cat._id}
                     value={cat._id}
-                    selected={index === values.sub_category}
+                    selected={cat._id === values.sub_category._id}
                   >
                     {cat.name}
                   </option>
@@ -170,7 +165,9 @@ const Product = () => {
                 }
               >
                 <option selected>Select Shipping</option>
-                <option value="yes">Yes</option>
+                <option value="yes" selected={values.shipping === "yes"}>
+                  Yes
+                </option>
                 <option value="no">No</option>
               </select>
             </div>
@@ -183,11 +180,11 @@ const Product = () => {
                 }
               >
                 <option selected>Select Color</option>
-                {categories.map((cat) => (
+                {/* {categories.map((cat) => (
                   <option key={cat._id} value={cat._id}>
                     {cat.name}
                   </option>
-                ))}
+                ))} */}
               </select>
             </div>
             <div className="col-md-6">
@@ -199,11 +196,11 @@ const Product = () => {
                 }
               >
                 <option selected>Select Brand</option>
-                {categories.map((cat) => (
+                {/* {categories.map((cat) => (
                   <option key={cat._id} value={cat._id}>
                     {cat.name}
                   </option>
-                ))}
+                ))} */}
               </select>
             </div>
             <div className="col-md-6">
@@ -213,11 +210,11 @@ const Product = () => {
                 onChange={(e) => setValues({ ...values, size: e.target.value })}
               >
                 <option selected>Select size</option>
-                {categories.map((cat) => (
+                {/* {categories.map((cat) => (
                   <option key={cat._id} value={cat._id}>
                     {cat.name}
                   </option>
-                ))}
+                ))} */}
               </select>
             </div>
             <div className="col-md-6">
@@ -230,4 +227,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default UpdateProduct;

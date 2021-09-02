@@ -4,7 +4,8 @@ import { useSelector } from "react-redux";
 import { currentAdmin } from "../api/auth.api";
 
 const AdminRoute = ({ children, ...rest }) => {
-  const { user } = useSelector((state) => ({ ...state }));
+  const user = useSelector((state) => state.user.value);
+
   const [ok, setOk] = useState(false);
 
   useEffect(() => {

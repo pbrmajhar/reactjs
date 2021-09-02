@@ -20,7 +20,7 @@ const SubCategory = () => {
   const [keyword, setKeyword] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
 
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user.value);
 
   useEffect(() => {
     loadCats();

@@ -1,20 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import firebase from "firebase";
 import { useHistory } from "react-router-dom";
 import "./style.css";
+import Search from "./forms/Search";
+import { loginReducer, logoutReducer } from "../store/reducers/user";
 
 const Header = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const user = useSelector((state) => state.user);
+  const {products} = useSelector(state => state.cart)
   const logout = () => {
     firebase.auth().signOut();
-    dispatch({
-      type: "LOGOUT",
-      payload: null,
-    });
+    dispatch(logoutReducer());
     history.push("/login");
   };
   return (
@@ -41,17 +41,18 @@ const Header = () => {
                   <NavLink
                     className="nav-link"
                     activeClassName="active"
-                    to="/app"
+                    to="/cart"
                   >
-                    App
+                    Cart
+                    <span class="badge bg-primary rounded-pill">{products.length}</span>
                   </NavLink>
                 </li>
               </>
             )}
           </ul>
-
+          <Search />
           <ul
-            className="navbar-nav ml-auto mb-2 mb-lg-0"
+            className="navbar-nav ml-auto mb-4 mb-lg-0"
             style={{ float: "right" }}
           >
             {!user && (

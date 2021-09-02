@@ -11,7 +11,7 @@ import {
 import CategoryForm from "../../components/forms/Category.form";
 
 const Category = () => {
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user.value);
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
   const [id, setId] = useState("");
